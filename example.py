@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import sys, os
+import getpass
 sys.path.append(os.path.join(sys.path[0],'src'))
 
 from instabot import InstaBot
@@ -10,16 +11,20 @@ from unfollow_protocol import unfollow_protocol
 from follow_protocol import follow_protocol
 import time
 
+username_input = raw_input("Username: ")
+passowrd_input = getpass.getpass('Password: ')
 
-bot = InstaBot(login="username", password="password",
-               like_per_day=1000,
+bot = InstaBot(login=username_input, password=passowrd_input,
+               like_per_day=899,
                comments_per_day=0,
-               tag_list=['follow4follow', 'f4f', 'cute'],
-               tag_blacklist=['rain', 'thunderstorm'],
+               tag_list=['outdoors', 'adventure', 'photography', 'exploring', 'explore', 'adventure', 'climbing', 'bouldering', 'fashion', 'cats', 'cat', 'yosemite', 'yellowstone', 'travel', 'desert'],
+               tag_blacklist=[],
                user_blacklist={},
                max_like_for_one_tag=50,
+               media_max_like=200,
+               media_min_like=3,
                follow_per_day=300,
-               follow_time=1*60,
+               follow_time=60*60*24,
                unfollow_per_day=300,
                unfollow_break_min=15,
                unfollow_break_max=30,
