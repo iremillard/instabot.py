@@ -520,6 +520,7 @@ class InstaBot:
             # Bot iteration in 1 sec
             time.sleep(3)
             # print("Tic!")
+            print(".")
 
     def new_auto_mod_like(self):
         if time.time() > self.next_iteration["Like"] and self.like_per_day != 0 \
@@ -557,7 +558,7 @@ class InstaBot:
             if (self.bot_mode == 0) :
                 for f in self.bot_follow_list:
                     if time.time() > (f[1] + self.follow_time):
-                        log_string = "Trying to unfollow #%i: "
+                        log_string = "Trying to unfollow #%i: " % f
                         self.write_log(log_string)
                         self.auto_unfollow()
                         self.bot_follow_list.remove(f)
@@ -633,7 +634,7 @@ class InstaBot:
             current_user=self.media_on_feed[chooser]["owner"]["username"]
         if (self.login_status):
             now_time = datetime.datetime.now()
-            log_string = "%s : Get user info \n%s"%(self.user_login,now_time.strftime("%d.%m.%Y %H:%M"))
+            log_string = "%s : Get user info \n%s"%(self.user_login,now_time.strftime("%Y%d%m-%H:%M"))
             self.write_log(log_string)
             if self.login_status == 1:
                 url_tag = 'https://www.instagram.com/%s/'%(current_user)
@@ -653,7 +654,7 @@ class InstaBot:
 
                     self.user_info = list(all_data['entry_data']['ProfilePage'])
                     i=0
-                    log_string="Checking user info.."
+                    log_string="Checking user info..."
                     self.write_log(log_string)
 
 
@@ -665,11 +666,11 @@ class InstaBot:
                         followed_by_viewer = self.user_info[0]['user']['followed_by_viewer']
                         requested_by_viewer = self.user_info[0]['user']['requested_by_viewer']
                         has_requested_viewer = self.user_info[0]['user']['has_requested_viewer']
-                        log_string = "Follower : %i" % (follower)
+                        log_string = "Followers: %i" % (follower)
                         self.write_log(log_string)
-                        log_string = "Following : %s" % (follows)
+                        log_string = "Following: %s" % (follows)
                         self.write_log(log_string)
-                        log_string = "Media : %i" % (media)
+                        log_string = "Media:     %i" % (media)
                         self.write_log(log_string)
                         if follower/follows > 2:
                             self.is_selebgram = True
@@ -716,12 +717,14 @@ class InstaBot:
                 return 0
 
             if self.is_selebgram is not False or self.is_fake_account is not False or self.is_active_user is not True or self.is_follower is not True:
-                print (current_user)
+                print ("Unfollowing: %s" % current_user)
                 self.unfollow(current_id)
                 try:
                     del self.media_on_feed[chooser]
                 except:
                     self.media_on_feed = []
+            else:
+                print ("Not unfollowing: %s" % current_user)
             self.media_on_feed = []
 
     def get_media_id_recent_feed (self):

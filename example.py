@@ -11,13 +11,16 @@ from unfollow_protocol import unfollow_protocol
 from follow_protocol import follow_protocol
 import time
 
+print("Please enter your Instagram credentials")
 username_input = raw_input("Username: ")
 passowrd_input = getpass.getpass('Password: ')
 
 bot = InstaBot(login=username_input, password=passowrd_input,
-               like_per_day=899,
+               like_per_day=989,
                comments_per_day=0,
-               tag_list=['outdoors', 'adventure', 'photography', 'exploring', 'explore', 'adventure', 'climbing', 'bouldering', 'fashion', 'cats', 'cat', 'yosemite', 'yellowstone', 'travel', 'desert'],
+               tag_list=['outdoors', 'adventure', 'photography', 'exploring', 'explore', 'camping', 
+                          'adventure', 'climbing', 'bouldering', 'fashion', 'yosemite', 'yellowstone', 
+                          'travel', 'desert', 'forest', 'nationalpark', 'backpacking'],
                tag_blacklist=[],
                user_blacklist={},
                max_like_for_one_tag=50,
