@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
 from userinfo import UserInfo
 import requests
 import random
@@ -11,8 +10,10 @@ import json
 import atexit
 import signal
 import itertools
+import pdb
 
 from unfollow_protocol import unfollow_protocol
+
 
 class InstaBot:
     """
@@ -306,6 +307,8 @@ class InstaBot:
 
                     self.media_by_tag = list(all_data['entry_data']['TagPage'][0] \
                                                  ['tag']['media']['nodes'])
+
+                    #pdb.set_trace()
                 except:
                     self.media_by_tag = []
                     self.write_log("Except on get_media!")
@@ -350,8 +353,16 @@ class InstaBot:
 
                             log_string = "Trying to like media: %s" % \
                                          (self.media_by_tag[i]['id'])
+
+                            # Additional logging
+                            log_string +="\n    >>> URL:      instagram.com/p/%s" % self.media_by_tag[i]['code']
+                            log_string +="\n    >>> Caption:  %s" % self.media_by_tag[i]['caption'].rstrip('\r\n').replace('\n',' ')[:100]
+                            log_string +="\n    >>> Likes:    %s" % self.media_by_tag[i]['likes']['count']
+                            log_string +="\n    >>> Comments: %s" % self.media_by_tag[i]['comments']['count']
+
                             self.write_log(log_string)
                             like = self.like(self.media_by_tag[i]['id'])
+
                             # comment = self.comment(self.media_by_tag[i]['id'], 'Cool!')
                             # follow = self.follow(self.media_by_tag[i]["owner"]["id"])
                             if like != 0:
@@ -520,7 +531,6 @@ class InstaBot:
             # Bot iteration in 1 sec
             time.sleep(3)
             # print("Tic!")
-            print(".")
 
     def new_auto_mod_like(self):
         if time.time() > self.next_iteration["Like"] and self.like_per_day != 0 \
@@ -558,7 +568,7 @@ class InstaBot:
             if (self.bot_mode == 0) :
                 for f in self.bot_follow_list:
                     if time.time() > (f[1] + self.follow_time):
-                        log_string = "Trying to unfollow #%i: " % f
+                        log_string = "Trying to unfollow #%s: " % f[0]
                         self.write_log(log_string)
                         self.auto_unfollow()
                         self.bot_follow_list.remove(f)
