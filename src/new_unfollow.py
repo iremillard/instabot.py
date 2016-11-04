@@ -12,6 +12,6 @@ def new_unfollow(self, user_id, user_name):
             self.write_log(log_string)
         return unfollow
     except:
-        self.write_log("Exept on unfollow!")
+        self.write_log("Exeption on unfollow!")
         return False
 

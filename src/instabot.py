@@ -413,7 +413,7 @@ class InstaBot:
                 like = self.s.post(url_likes)
                 last_liked_media_id = media_id
             except:
-                self.write_log("Except on like!")
+                self.write_log("Exception on like!")
                 like = 0
             return like
 
@@ -424,7 +424,7 @@ class InstaBot:
             try:
                 unlike = self.s.post(url_unlike)
             except:
-                self.write_log("Except on unlike!")
+                self.write_log("Exception on unlike!")
                 unlike = 0
             return unlike
 

@@ -19,20 +19,20 @@ passowrd_input = getpass.getpass('Password: ')
 #passowrd_input = ''
 
 bot = InstaBot(login=username_input, password=passowrd_input,
-               like_per_day=999,
+               like_per_day=5000,
                comments_per_day=0,
                tag_list=['outdoors', 'adventure', 'photography', 'exploring', 'explore', 'camping', 
-                          'adventure', 'climbing', 'bouldering', 'fashion', 'yosemite', 'yellowstone', 
+                          'adventure', 'climbing', 'bouldering' 'yosemite', 'yellowstone', 
                           'travel', 'desert', 'forest', 'nationalpark', 'backpacking', 'rei', 'wilderness'],
                tag_blacklist=[],
                user_blacklist={},
                max_like_for_one_tag=50,
                media_max_like=200,
                media_min_like=3,
-               follow_per_day=300,
+               follow_per_day=200,
                follow_time=60*60*24, #24 hours
                #follow_time=60, #1 min
-               unfollow_per_day=300,
+               unfollow_per_day=200,
                unfollow_break_min=15,
                unfollow_break_max=30,
                log_mod=0,

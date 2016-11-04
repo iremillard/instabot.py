@@ -1,0 +1,22 @@
+LOGGING IMPROVEMENT
+  [ ] Add time stamp to logging
+  [ ] Add uptime to logging or start time
+  [ ] Add username on like logging
+  [ ] Better logging on follow (user name etc)
+  [ ] Add sperate logging for like machine and follow machine
+  [ ] Log rotator
+
+
+LARGE PROJECTS
+  [ ] Machine learning for spam profile control
+  [ ] Bot Factory
+  [ ] Hive Mind
+  [ ] Split like machine and follow machine
+  [ ] Add threading for console control
+
+LIKE MACHINE
+  [ ] Filter like media by comment key words ('giveaway')
+
+
+
+
