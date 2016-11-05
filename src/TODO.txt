@@ -1,8 +1,9 @@
 LOGGING IMPROVEMENT
   [ ] Add time stamp to logging
   [ ] Add uptime to logging or start time
+  [ ] Option to show user info in log for likes and follows(username comments likes etc)
   [ ] Add username on like logging
-  [ ] Better logging on follow (user name etc)
+  [ ] Better logging on follow (user name, desc etc)
   [ ] Add sperate logging for like machine and follow machine
   [ ] Log rotator
 
