@@ -774,6 +774,8 @@ class InstaBot:
     def write_log(self, log_text):
         """ Write log by print() or logger """
 
+        log_text = "[%s] %s" % (datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), log_text)
+
         if self.log_mod == 0:
             try:
                 print(log_text)

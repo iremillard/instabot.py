@@ -44,7 +44,7 @@ bot = InstaBot(login=username_input, password=passowrd_input,
                                        'travel','art','shop','store','sex','toko','jual','online','murah','jam','kaos','case','baju','fashion',
                                         'corp','tas','butik','grosir','karpet','sosis','salon','skin','care','cloth','tech','rental',
                                         'kamera','beauty','express','kredit','collection','impor','preloved','follow','follower','gain',
-                                        '.id','_id','bags'])
+                                        '.id','_id','bags', 'product'])
 while True:
 
     #print("# MODE 0 = ORIGINAL MODE BY LEVPASHA")
