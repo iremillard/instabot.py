@@ -1,5 +1,5 @@
 LOGGING IMPROVEMENT
-  [ ] Add time stamp to logging
+  [X] Add time stamp to logging
   [ ] Add uptime to logging or start time
   [ ] Option to show user info in log for likes and follows(username comments likes etc)
   [ ] Add username on like logging
@@ -17,6 +17,10 @@ LARGE PROJECTS
 
 LIKE MACHINE
   [ ] Filter like media by comment key words ('giveaway')
+  [ ] Add like rate in addition to max likes per day
+  [ ] Add running hours
+  [ ] Add max likes per day
+  [ ] Add like rate per hour (convert likes per day)
 
 
 
