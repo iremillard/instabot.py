@@ -1,9 +1,3 @@
-## Offtop
-
-Hi all. I need your help! Support my project on Steam Greenlight. It is very important to me, and if I succeed I'll have more time to this project. Thank you!
-
-<a href="http://steamcommunity.com/sharedfiles/filedetails/?id=790882811" title="Suppor Ultimus bellum on Steam Greenlight"><img src="http://i.imgur.com/8JOnnOR.jpg"></a>
-
 ## InstaBot
 InstaBot v 1.1.0
 
@@ -232,6 +226,11 @@ Get followers list with limit 10:
 ui.get_followers(limit=10)
 print(ui.followers)
 ```
+
+## Community
+
+- [Telegram Group](https://telegram.me/joinchat/DYKH-wdXpfmQCdcJLaV48Q)
+- [Facebook Group](https://www.facebook.com/groups/instabot/)
 
 [1]: http://developers.instagram.com/post/133424514006/instagram-platform-update
 [2]: https://www.instagram.com
