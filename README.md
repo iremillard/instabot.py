@@ -1,5 +1,5 @@
 ## InstaBot
-InstaBot v 1.0.1
+InstaBot v 1.1.0
 
 Works without the new Instagram [api][1](the new review process)
 Username and password stored local. Written in Python
@@ -185,7 +185,7 @@ Ubuntu 15.10 wily - Python 3.4.3+ & 2.7.10
 MacOS X El Captain 10.11.4 - Python 2.7
 ## Warning!
 The End-User assumes sole responsibility for anything resulting from the use or modification this program.
-Don't worry the bot will not : 
+Don't worry the bot will not :
 - Like - comment or follow your own account or media
 - Comment a media already commented
 
@@ -226,6 +226,11 @@ Get followers list with limit 10:
 ui.get_followers(limit=10)
 print(ui.followers)
 ```
+
+## Community
+
+- [Telegram Group](https://telegram.me/joinchat/DYKH-wdXpfmQCdcJLaV48Q)
+- [Facebook Group](https://www.facebook.com/groups/instabot/)
 
 [1]: http://developers.instagram.com/post/133424514006/instagram-platform-update
 [2]: https://www.instagram.com
