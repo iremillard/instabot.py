@@ -12,6 +12,7 @@ import signal
 import itertools
 import pdb
 import sys
+import psycopg2
 
 
 from unfollow_protocol import unfollow_protocol
@@ -90,6 +91,9 @@ class InstaBot:
     self_following = 0
     self_follower = 0
 
+    #database settings
+    database_name = 'instabot'
+    database_host = 'localhost'
 
     # Log setting.
     log_file_path = ''
@@ -123,11 +127,15 @@ class InstaBot:
                  tag_blacklist=[],
                  unwanted_username_list=[]):
 
+        
+
         self.bot_start = datetime.datetime.now()
         self.unfollow_break_min = unfollow_break_min
         self.unfollow_break_max = unfollow_break_max
         self.user_blacklist = user_blacklist
         self.tag_blacklist = tag_blacklist
+
+
 
         self.time_in_day = 24 * 60 * 60
         # Like
@@ -172,6 +180,14 @@ class InstaBot:
               'https': 'http://'+proxy,
             }
             self.s.proxies.update(proxies)
+
+        try:
+            self.db_connection  = psycopg2.connect("dbname='" + self.database_name + "' host='" + self.database_host + "'")
+            self.write_log("Connected to database: '" + self.database_name + "'")
+        except:
+            self.write_log("I am unable to connect to database: '" + self.database_name + "'")
+            exit
+   
         # convert login to lower
         self.user_login = login.lower()
         self.user_password = password
