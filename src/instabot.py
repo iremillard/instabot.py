@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 from userinfo import UserInfo
+from database_wrapper import DatabaseWrapper
 import requests
 import random
 import time
@@ -12,7 +13,6 @@ import signal
 import itertools
 import pdb
 import sys
-import psycopg2
 
 
 from unfollow_protocol import unfollow_protocol
@@ -181,12 +181,21 @@ class InstaBot:
             }
             self.s.proxies.update(proxies)
 
-        try:
-            self.db_connection  = psycopg2.connect("dbname='" + self.database_name + "' host='" + self.database_host + "'")
+        # try:
+        #     self.db_connection  = psycopg2.connect("dbname='" + self.database_name + "' host='" + self.database_host + "'")
+        #     self.db_cursor = self.db_connection.cursor()
+        #     self.write_log("Connected to database: '" + self.database_name + "'")
+        # except:
+        #     self.write_log("I am unable to connect to database: '" + self.database_name + "'")
+        #     sys.exit(1)
+
+        self.database_wrapper = DatabaseWrapper(database_name= self.database_name, database_host= self.database_host)
+        
+        if self.database_wrapper.connect:
             self.write_log("Connected to database: '" + self.database_name + "'")
-        except:
+        else:
             self.write_log("I am unable to connect to database: '" + self.database_name + "'")
-            exit
+            sys.exit(1)
    
         # convert login to lower
         self.user_login = login.lower()
