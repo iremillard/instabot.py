@@ -308,15 +308,16 @@ class InstaBot:
             self.logout()
         exit(0)
 
-    def cleanup2(self):
+    def cleanup_from_database(self):
         # Unfollow all bot follow using the database
-        for f in self.database_wrapper.all_currently_following(self.user_id):
+        unfollow_list = self.database_wrapper.all_currently_following(self.user_id)
+        self.follow_counter = len(unfollow_list)
+        for f in unfollow_list:
             log_string = "Trying to unfollow: %s" % (f)
             self.write_log(log_string)
             self.unfollow_on_cleanup(f)
             sleeptime = random.randint(self.unfollow_break_min, self.unfollow_break_max)
-            log_string = "Pausing for %i seconds... %i of %i" % (
-            sleeptime, self.unfollow_counter, self.follow_counter)
+            log_string = "Pausing for %i seconds... %i of %i" % (sleeptime, self.unfollow_counter, self.follow_counter)
             self.write_log(log_string)
             time.sleep(sleeptime)
 
