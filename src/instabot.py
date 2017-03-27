@@ -310,17 +310,15 @@ class InstaBot:
 
     def cleanup2(self):
         # Unfollow all bot follow using the database
-        if self.follow_counter >= self.unfollow_counter:
-            for f in self.bot_follow_list:
-                log_string = "Trying to unfollow: %s" % (f[0])
-                self.write_log(log_string)
-                self.unfollow_on_cleanup(f[0])
-                sleeptime = random.randint(self.unfollow_break_min, self.unfollow_break_max)
-                log_string = "Pausing for %i seconds... %i of %i" % (
-                sleeptime, self.unfollow_counter, self.follow_counter)
-                self.write_log(log_string)
-                time.sleep(sleeptime)
-                #self.bot_follow_list.remove(f)
+        for f in self.database_wrapper.all_currently_following(self.user_id):
+            log_string = "Trying to unfollow: %s" % (f)
+            self.write_log(log_string)
+            self.unfollow_on_cleanup(f)
+            sleeptime = random.randint(self.unfollow_break_min, self.unfollow_break_max)
+            log_string = "Pausing for %i seconds... %i of %i" % (
+            sleeptime, self.unfollow_counter, self.follow_counter)
+            self.write_log(log_string)
+            time.sleep(sleeptime)
 
         # Logout
         if (self.login_status):
@@ -525,16 +523,17 @@ class InstaBot:
                 self.write_log("Exept on unfollow!")
         return False
 
-    def unfollow_on_cleanup(self, user_id):
+    def unfollow_on_cleanup(self, user_to_unfollow_id):
         """ Unfollow on cleanup by @rjmayott """
         if (self.login_status):
-            url_unfollow = self.url_unfollow % (user_id)
+            url_unfollow = self.url_unfollow % (user_to_unfollow_id)
             try:
                 unfollow = self.s.post(url_unfollow)
                 if unfollow.status_code == 200:
                     self.unfollow_counter += 1
-                    log_string = "Unfollow: %s #%i of %i." % (user_id, self.unfollow_counter, self.follow_counter)
+                    log_string = "Unfollow: %s #%i of %i." % (user_to_unfollow_id, self.unfollow_counter, self.follow_counter)
                     self.write_log(log_string)
+                    self.database_wrapper.add_unfollow_record(self.user_id, user_to_unfollow_id)
                 else:
                     log_string = "Slow Down - Pausing for 5 minutes so we don't get banned!"
                     self.write_log(log_string)
@@ -542,7 +541,7 @@ class InstaBot:
                     unfollow = self.s.post(url_unfollow)
                     if unfollow.status_code == 200:
                         self.unfollow_counter += 1
-                        log_string = "Unfollow: %s #%i of %i." % (user_id, self.unfollow_counter, self.follow_counter)
+                        log_string = "Unfollow: %s #%i of %i." % (user_to_unfollow_id, self.unfollow_counter, self.follow_counter)
                         self.write_log(log_string)
                     else:
                         log_string = "Still no good :( Skipping and pausing for another 5 minutes"
