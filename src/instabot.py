@@ -192,7 +192,6 @@ class InstaBot:
 
         if self.database_wrapper.connect():
             self.write_log("Connected to database: '" + self.database_name + "'")
-            print self.database_wrapper.is_connected
         else:
             self.write_log("I am unable to connect to database: '" + self.database_name + "'")
             sys.exit(1)
@@ -302,12 +301,32 @@ class InstaBot:
                 sleeptime, self.unfollow_counter, self.follow_counter)
                 self.write_log(log_string)
                 time.sleep(sleeptime)
-                self.bot_follow_list.remove(f)
+                #self.bot_follow_list.remove(f)
 
         # Logout
         if (self.login_status):
             self.logout()
         exit(0)
+
+    def cleanup2(self):
+        # Unfollow all bot follow using the database
+        if self.follow_counter >= self.unfollow_counter:
+            for f in self.bot_follow_list:
+                log_string = "Trying to unfollow: %s" % (f[0])
+                self.write_log(log_string)
+                self.unfollow_on_cleanup(f[0])
+                sleeptime = random.randint(self.unfollow_break_min, self.unfollow_break_max)
+                log_string = "Pausing for %i seconds... %i of %i" % (
+                sleeptime, self.unfollow_counter, self.follow_counter)
+                self.write_log(log_string)
+                time.sleep(sleeptime)
+                #self.bot_follow_list.remove(f)
+
+        # Logout
+        if (self.login_status):
+            self.logout()
+        exit(0)
+
 
     def get_media_id_by_tag(self, tag):
         """ Get media ID set, by your hashtag """

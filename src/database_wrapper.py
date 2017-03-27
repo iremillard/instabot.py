@@ -37,3 +37,7 @@ class DatabaseWrapper:
       return len(self.db_cursor.fetchall()) > 0
     else:
       raise Exception('database_wrapper not connected!')
+
+  def all_currently_following(self, user_id):
+    self.db_cursor.execute("SELECT is_following_id FROM follow_records WHERE user_id = '%s' AND unfollowed_at IS NULL" % (user_id))
+    return list(map(lambda row: row[0], self.db_cursor.fetchall()))
