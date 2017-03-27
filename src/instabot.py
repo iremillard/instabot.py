@@ -94,6 +94,7 @@ class InstaBot:
     #database settings
     database_name = 'instabot'
     database_host = 'localhost'
+    database_wrapper = DatabaseWrapper(database_name= database_name, database_host= database_host)
 
     # Log setting.
     log_file_path = ''
@@ -189,10 +190,9 @@ class InstaBot:
         #     self.write_log("I am unable to connect to database: '" + self.database_name + "'")
         #     sys.exit(1)
 
-        self.database_wrapper = DatabaseWrapper(database_name= self.database_name, database_host= self.database_host)
-        
-        if self.database_wrapper.connect:
+        if self.database_wrapper.connect():
             self.write_log("Connected to database: '" + self.database_name + "'")
+            print self.database_wrapper.is_connected
         else:
             self.write_log("I am unable to connect to database: '" + self.database_name + "'")
             sys.exit(1)
@@ -589,10 +589,10 @@ class InstaBot:
             self.write_log(log_string)
 
             if self.follow(self.media_by_tag[0]["owner"]["id"]) != False:
-                self.bot_follow_list.append([self.media_by_tag[0]["owner"]["id"],
-                                             time.time()])
-                self.next_iteration["Follow"] = time.time() + \
-                                                self.add_time(self.follow_delay)
+                self.bot_follow_list.append([self.media_by_tag[0]["owner"]["id"], time.time()])
+
+                self.database_wrapper.add_follow_record(self.user_id, self.media_by_tag[0]["owner"]["id"])
+                self.next_iteration["Follow"] = time.time() + self.add_time(self.follow_delay)
 
     def new_auto_mod_unfollow(self):
         if time.time() > self.next_iteration["Unfollow"] and \
