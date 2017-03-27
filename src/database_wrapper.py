@@ -17,11 +17,18 @@ class DatabaseWrapper:
     except:
         return False
 
-  def add_follow_record(self, username, is_follow_user):
+  def add_follow_record(self, user_id, is_following_user_id):
     if self.is_connected:
-      self.db_cursor.execute("INSERT INTO follow_records (username, is_following, followed_at) VALUES ('%s', '%s', '%s')" % (username, is_follow_user, strftime("%Y%m%d %H:%M:%S", gmtime())))
+      self.db_cursor.execute("INSERT INTO follow_records (user_id, is_following_id, followed_at) VALUES ('%s', '%s', '%s')" % (user_id, is_following_user_id, strftime("%Y%m%d %H:%M:%S", gmtime())))
       self.db_connection.commit()
     else:
       raise Exception('database_wrapper not connected!')
 
-  #def add_unfollow_record(self, username, unfollowed_user):
+  #def add_unfollow_record(self, user_id, unfollowed_user):
+
+  def check_if_ever_followed(self, user_id, is_following_user_id):
+    if self.is_connected:
+      self.db_cursor.execute("SELECT id FROM follow_records WHERE user_id ='%s' AND is_following_id='%s'" % (user_id, is_following_user_id))
+      return len(self.db_cursor.fetchall()) > 0
+    else:
+      raise Exception('database_wrapper not connected!')
