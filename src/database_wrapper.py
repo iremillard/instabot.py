@@ -24,7 +24,12 @@ class DatabaseWrapper:
     else:
       raise Exception('database_wrapper not connected!')
 
-  #def add_unfollow_record(self, user_id, unfollowed_user):
+  def add_unfollow_record(self, user_id, unfollowed_user):
+    if self.is_connected:
+      self.db_cursor.execute("UPDATE follow_records SET unfollowed_at = '%s' WHERE user_id = '%s' AND is_following_id = '%s'" % (strftime("%Y%m%d %H:%M:%S", gmtime()), user_id, unfollowed_user))
+      self.db_connection.commit()
+    else:
+      raise Exception('database_wrapper not connected!')
 
   def check_if_ever_followed(self, user_id, is_following_user_id):
     if self.is_connected:
