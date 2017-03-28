@@ -5,11 +5,11 @@ import getpass
 sys.path.append(os.path.join(sys.path[0],'src'))
 
 from instabot import InstaBot
-from check_status import check_status
-from feed_scanner import feed_scanner
-from unfollow_protocol import unfollow_protocol
-from follow_protocol import follow_protocol
-import time
+# from check_status import check_status
+# from feed_scanner import feed_scanner
+# from unfollow_protocol import unfollow_protocol
+# from follow_protocol import follow_protocol
+# import time
 
 print("Please enter your Instagram credentials")
 username_input = raw_input("Username: ")

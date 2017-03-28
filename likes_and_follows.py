@@ -30,7 +30,7 @@ bot = InstaBot(login=username_input, password=passowrd_input,
                max_like_for_one_tag=50,
                media_max_like=200,
                media_min_like=3,
-               follow_per_day=250,
+               follow_per_day=325,
                follow_time=60*60*24, #24 hours
                #follow_time=60, #1 min
                unfollow_per_day=0,
@@ -45,7 +45,8 @@ bot = InstaBot(login=username_input, password=passowrd_input,
                                        'travel','art','shop','store','sex','toko','jual','online','murah','jam','kaos','case','baju','fashion',
                                         'corp','tas','butik','grosir','karpet','sosis','salon','skin','care','cloth','tech','rental',
                                         'kamera','beauty','express','kredit','collection','impor','preloved','follow','follower','gain',
-                                        '.id','_id','bags', 'product'])
+                                        '.id','_id','bags', 'product'],
+               cleanup_on_close=False)
 while True:
   bot.new_auto_mod()
 
