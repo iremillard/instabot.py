@@ -684,6 +684,8 @@ class InstaBot:
                 return True
         return False
 
+    #unfollows random users you are following based on a set of rules that try to determine if they are likely to follow you back
+    #this may select ANY user you are following
     def auto_unfollow(self):
         chooser = 1
         current_user = 'abcd'

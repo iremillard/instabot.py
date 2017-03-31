@@ -34,7 +34,9 @@ class DatabaseWrapper:
 
   def all_currently_following(self, user_id):
     self.check_connection()
-    self.db_cursor.execute("SELECT is_following_id FROM follow_records WHERE user_id = '%s' AND unfollowed_at IS NULL" % (user_id))
+    #self.db_cursor.execute("SELECT is_following_id FROM follow_records WHERE user_id = '%s' AND unfollowed_at IS NULL" % (user_id))
+    #get the oldest first
+    self.db_cursor.execute("SELECT is_following_id FROM follow_records WHERE user_id = '%s' AND unfollowed_at IS NULL ORDER BY id ASC;" % (user_id))
     return list(map(lambda row: row[0], self.db_cursor.fetchall()))
 
   def check_connection(self):
