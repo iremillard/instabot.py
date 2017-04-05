@@ -47,7 +47,7 @@ bot = InstaBot(login=username_input, password=passowrd_input,
                                         'kamera','beauty','express','kredit','collection','impor','preloved','follow','follower','gain',
                                         '.id','_id','bags', 'product'],
                unfollow_on_close=False,
-               #total_run_time=60*60*12) #12 hours
+               total_run_time=60*60*12) #12 hours
 
 bot.new_auto_mod()
 
