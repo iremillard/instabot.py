@@ -39,12 +39,12 @@ class DatabaseWrapper:
     self.db_cursor.execute("SELECT is_following_id FROM follow_records WHERE user_id = '%s' AND unfollowed_at IS NULL ORDER BY id ASC;" % (user_id))
     return list(map(lambda row: row[0], self.db_cursor.fetchall()))
 
-  def oldest_follow_id(self, user_id):
+  def oldest_follow_id_and_follow_date(self, user_id):
     self.check_connection()
-    self.db_cursor.execute("SELECT is_following_id FROM follow_records WHERE user_id = '%s' AND unfollowed_at IS NULL ORDER BY id ASC LIMIT 1;" % (user_id))
+    self.db_cursor.execute("SELECT is_following_id, followed_at FROM follow_records WHERE user_id = '%s' AND unfollowed_at IS NULL ORDER BY id ASC LIMIT 1;" % (user_id))
     rows = self.db_cursor.fetchall()
     if len(rows) > 0:
-      return rows[0][0]
+      return rows[0]
     else:
       return None
 

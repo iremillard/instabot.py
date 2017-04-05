@@ -21,10 +21,10 @@ passowrd_input = getpass.getpass('Password: ')
 bot = InstaBot(login=username_input, password=passowrd_input,
                like_per_day=4000,
                comments_per_day=0,
-               tag_list=['outdoors', 'adventure', 'photography', 'exploring', 'explore', 'camping', 
+               tag_list=['outdoors', 'adventure', 'photography', 'exploring', 'explore', 'camping', 'backpacking',
                           'adventure', 'climbing', 'bouldering' 'yosemite', 'yellowstone', 
                           'travel', 'desert', 'forest', 'nationalpark', 'backpacking', 'mg5k', 'wilderness',
-                          'moodygrams', 'shoot2kill', 'artofvisuals', 'aov5k'],
+                          'moodygrams', 'shoot2kill', 'artofvisuals', 'aov5k', 'wanderlust', 'journey'],
                tag_blacklist=[],
                user_blacklist={'serena.claudio':''},
                max_like_for_one_tag=50,
@@ -46,9 +46,10 @@ bot = InstaBot(login=username_input, password=passowrd_input,
                                         'corp','tas','butik','grosir','karpet','sosis','salon','skin','care','cloth','tech','rental',
                                         'kamera','beauty','express','kredit','collection','impor','preloved','follow','follower','gain',
                                         '.id','_id','bags', 'product'],
-               cleanup_on_close=False)
-while True:
-  bot.new_auto_mod()
+               cleanup_on_close=False,
+               total_run_time=60*60*12) #12 hours
+
+bot.new_auto_mod()
 
 
     #print("# MODE 0 = ORIGINAL MODE BY LEVPASHA")

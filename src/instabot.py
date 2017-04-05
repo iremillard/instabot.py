@@ -5,6 +5,7 @@ from database_wrapper import DatabaseWrapper
 import requests
 import random
 import time
+from time import gmtime, strftime
 import datetime
 import logging
 import json
@@ -35,6 +36,8 @@ class InstaBot:
 
     log_mod = 0 - Log mod: log_mod = 0 log to console, log_mod = 1 log to file,
     log_mod = 2 no log.
+
+    total_run_time=0 - (in sec) bot will automatically exit after total run time is met. Will run indefinitely if 0
 
     https://github.com/LevPasha/instabot.py
     """
@@ -88,6 +91,8 @@ class InstaBot:
     is_by_tag = False
     is_follower_number = 0
 
+    end_at = None
+
     self_following = 0
     self_follower = 0
 
@@ -127,7 +132,8 @@ class InstaBot:
                  user_blacklist={},
                  tag_blacklist=[],
                  unwanted_username_list=[],
-                 cleanup_on_close=True):
+                 cleanup_on_close=True,
+                 total_run_time=0):
 
         
 
@@ -160,6 +166,10 @@ class InstaBot:
         self.comments_per_day = comments_per_day
         if self.comments_per_day != 0:
             self.comments_delay = self.time_in_day / self.comments_per_day
+
+        #run_time
+        if total_run_time > 0:
+            self.end_at = datetime.datetime.now() + datetime.timedelta(0, total_run_time)
 
         # Don't like if media have more than n likes.
         self.media_max_like = media_max_like
@@ -206,9 +216,12 @@ class InstaBot:
         self.media_by_user = []
         self.unwanted_username_list = unwanted_username_list
         now_time = datetime.datetime.now()
-        log_string = 'Instabot v1.1.0 started at %s:\n' % \
-                     (now_time.strftime("%d.%m.%Y %H:%M"))
+        log_string = 'Instabot v1.1.0 started at %s' % (now_time.strftime("%d.%m.%Y %H:%M:%S"))
         self.write_log(log_string)
+
+        if self.end_at is not None:
+            self.write_log('Instabot set run until %s' % (self.end_at.strftime("%d.%m.%Y %H:%M:%S")))
+        
         self.login()
         self.populate_user_blacklist()
         if cleanup_on_close:
@@ -546,6 +559,7 @@ class InstaBot:
                         self.unfollow_counter += 1
                         log_string = "Unfollow: %s #%i of %i." % (user_to_unfollow_id, self.unfollow_counter, self.follow_counter)
                         self.write_log(log_string)
+                        self.database_wrapper.add_unfollow_record(self.user_id, user_to_unfollow_id)
                     else:
                         log_string = "Still no good :( Skipping and pausing for another 5 minutes"
                         self.write_log(log_string)
@@ -567,7 +581,7 @@ class InstaBot:
                                               (1, self.max_like_for_one_tag))
 
     def new_auto_mod(self):
-        while True:
+        while (self.end_at is None or datetime.datetime.now() < self.end_at):
             # ------------------- Get media_id -------------------
             if len(self.media_by_tag) == 0:
                 self.get_media_id_by_tag(random.choice(self.tag_list))
@@ -585,6 +599,12 @@ class InstaBot:
             time.sleep(3)
             # print("Tic!")
 
+        log_string = 'Specified run time reached. Exiting at %s' % (datetime.datetime.now().strftime("%d.%m.%Y %H:%M:%S"))
+        self.write_log(log_string)
+
+        if (self.login_status):
+            self.logout()
+        exit(0)
     def new_auto_mod_like(self):
         if time.time() > self.next_iteration["Like"] and self.like_per_day != 0 \
                 and len(self.media_by_tag) > 0:
@@ -615,20 +635,50 @@ class InstaBot:
                 self.database_wrapper.add_follow_record(self.user_id, self.media_by_tag[0]["owner"]["id"])
                 self.next_iteration["Follow"] = time.time() + self.add_time(self.follow_delay)
 
+    # def new_auto_mod_unfollow(self):
+    #     #unfollows a random person from your follow list based on rules in auto_unfollow()
+    #     if time.time() > self.next_iteration["Unfollow"] and \
+    #                     self.unfollow_per_day != 0 and len(self.bot_follow_list) > 0:
+    #         if (self.bot_mode == 0) :
+    #             for f in self.bot_follow_list:
+    #                 if time.time() > (f[1] + self.follow_time):
+    #                     log_string = "Trying to unfollow #%s: " % f[0]
+    #                     self.write_log(log_string)
+    #                     self.auto_unfollow()
+    #                     self.bot_follow_list.remove(f)
+    #                     self.next_iteration["Unfollow"] = time.time() + \
+    #                                                       self.add_time(self.unfollow_delay)
+    #         if (self.bot_mode == 1) :
+    #             unfollow_protocol(self)
+
     def new_auto_mod_unfollow(self):
-        if time.time() > self.next_iteration["Unfollow"] and \
-                        self.unfollow_per_day != 0 and len(self.bot_follow_list) > 0:
-            if (self.bot_mode == 0) :
-                for f in self.bot_follow_list:
-                    if time.time() > (f[1] + self.follow_time):
-                        log_string = "Trying to unfollow #%s: " % f[0]
+        #TODO: This will get suck if there is a problem unfollowing someone (i.e. they have already been unfollowed) we should skip the problematic entries somehow
+
+        #unfollows the olderst person that the bot has followed based on the database records
+        if time.time() > self.next_iteration["Unfollow"] and self.unfollow_per_day != 0:
+            f = self.database_wrapper.oldest_follow_id_and_follow_date(self.user_id)
+            if f is not None:
+                if gmtime() > (time.mktime(f[1].timetuple()) + self.follow_time):
+                #if time.time() > (f[1] + self.follow_time):
+                    log_string = "Trying to unfollow %s: " % f[0]
+                    self.write_log(log_string)
+                    
+                    url_unfollow = self.url_unfollow % (f[0])
+                    try:
+                        unfollow = self.s.post(url_unfollow)
+                        if unfollow.status_code == 200:
+                            self.unfollow_counter += 1
+                            log_string = "Unfollow: %s #%i of %i." % (f[0], self.unfollow_counter, self.follow_counter)
+                            self.write_log(log_string)
+                            self.database_wrapper.add_unfollow_record(self.user_id, f[0])
+                        else:
+                            log_string = "Could not unfollow :( Skipping until next cycle"
+                            self.write_log(log_string)
+                    except:
+                        log_string = "Except on unfollow... Looks like a network error"
                         self.write_log(log_string)
-                        self.auto_unfollow()
-                        self.bot_follow_list.remove(f)
-                        self.next_iteration["Unfollow"] = time.time() + \
-                                                          self.add_time(self.unfollow_delay)
-            if (self.bot_mode == 1) :
-                unfollow_protocol(self)
+
+                    self.next_iteration["Unfollow"] = time.time() + self.add_time(self.unfollow_delay)
 
     def new_auto_mod_comments(self):
         if time.time() > self.next_iteration["Comments"] and self.comments_per_day != 0 \
