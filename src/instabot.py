@@ -90,6 +90,7 @@ class InstaBot:
     is_self_checking = False
     is_by_tag = False
     is_follower_number = 0
+    unfollow_on_close=True
 
     end_at = None
 
@@ -132,7 +133,7 @@ class InstaBot:
                  user_blacklist={},
                  tag_blacklist=[],
                  unwanted_username_list=[],
-                 cleanup_on_close=True,
+                 unfollow_on_close=True,
                  total_run_time=0):
 
         
@@ -224,9 +225,9 @@ class InstaBot:
         
         self.login()
         self.populate_user_blacklist()
-        if cleanup_on_close:
-            signal.signal(signal.SIGTERM, self.cleanup)
-            atexit.register(self.cleanup)
+        self.unfollow_on_close = unfollow_on_close
+        signal.signal(signal.SIGTERM, self.cleanup)
+        atexit.register(self.cleanup)
 
     def populate_user_blacklist(self):
         for user in self.user_blacklist:
@@ -306,17 +307,22 @@ class InstaBot:
 
     def cleanup(self, *_):
         # Unfollow all bot follow
-        if self.follow_counter >= self.unfollow_counter:
-            for f in self.bot_follow_list:
-                log_string = "Trying to unfollow: %s" % (f[0])
-                self.write_log(log_string)
-                self.unfollow_on_cleanup(f[0])
-                sleeptime = random.randint(self.unfollow_break_min, self.unfollow_break_max)
-                log_string = "Pausing for %i seconds... %i of %i" % (
-                sleeptime, self.unfollow_counter, self.follow_counter)
-                self.write_log(log_string)
-                time.sleep(sleeptime)
-                #self.bot_follow_list.remove(f)
+        if self.unfollow_on_close:
+            self.write_log("Unfollow on close requested!")
+            self.write_log("Attempting to unfollow all users followed in this session...")
+            if self.follow_counter >= self.unfollow_counter:
+                for f in self.bot_follow_list:
+                    log_string = "Trying to unfollow: %s" % (f[0])
+                    self.write_log(log_string)
+                    self.unfollow_on_cleanup(f[0])
+                    sleeptime = random.randint(self.unfollow_break_min, self.unfollow_break_max)
+                    log_string = "Pausing for %i seconds... %i of %i" % (
+                    sleeptime, self.unfollow_counter, self.follow_counter)
+                    self.write_log(log_string)
+                    time.sleep(sleeptime)
+                    #self.bot_follow_list.remove(f)
+        else:
+            self.write_log("Unfollow on close not requested. Exiting...")
 
         # Logout
         if (self.login_status):
@@ -599,12 +605,8 @@ class InstaBot:
             time.sleep(3)
             # print("Tic!")
 
-        log_string = 'Specified run time reached. Exiting at %s' % (datetime.datetime.now().strftime("%d.%m.%Y %H:%M:%S"))
+        log_string = 'Specified run time reached. Starting shutdown at %s' % (datetime.datetime.now().strftime("%d.%m.%Y %H:%M:%S"))
         self.write_log(log_string)
-
-        if (self.login_status):
-            self.logout()
-        exit(0)
     def new_auto_mod_like(self):
         if time.time() > self.next_iteration["Like"] and self.like_per_day != 0 \
                 and len(self.media_by_tag) > 0:

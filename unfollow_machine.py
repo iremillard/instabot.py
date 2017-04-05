@@ -39,6 +39,6 @@ bot = InstaBot(login=username_input, password=passowrd_input,
                ## Doesn't have to match entirely example: mozart will be blocked because it contains *art
                ### freefollowers will be blocked because it contains free
                unwanted_username_list=[],
-               cleanup_on_close=False)
+               unfollow_on_close=False)
 
 bot.cleanup_from_database()
