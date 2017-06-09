@@ -11,9 +11,17 @@ from instabot import InstaBot
 # from follow_protocol import follow_protocol
 # import time
 
-print("Please enter your Instagram credentials")
-username_input = raw_input("Username: ")
-passowrd_input = getpass.getpass('Password: ')
+username_input = ''
+passowrd_input = ''
+
+if len(sys.argv) == 3:
+     username_input = str(sys.argv[1])
+     passowrd_input = str(sys.argv[2])
+     print ("Username: %s" % username_input)
+else :
+     print("Please enter your Instagram credentials")
+     username_input = raw_input("Username: ")
+     passowrd_input = getpass.getpass('Password: ')
 
 #username_input = ''
 #passowrd_input = ''

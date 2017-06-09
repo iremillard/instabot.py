@@ -11,10 +11,12 @@ from unfollow_protocol import unfollow_protocol
 from follow_protocol import follow_protocol
 import time
 
-username_input = str(sys.argv[1])
-passowrd_input = str(sys.argv[2])
+username_input = ''
+passowrd_input = ''
 
-if len(username_input) > 0 and len(passowrd_input) > 0 :
+if len(sys.argv) == 3:
+  username_input = str(sys.argv[1])
+  passowrd_input = str(sys.argv[2])
   print ("Username: %s" % username_input)
 else :
   print("Please enter your Instagram credentials")
