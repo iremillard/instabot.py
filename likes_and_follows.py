@@ -11,9 +11,15 @@ from unfollow_protocol import unfollow_protocol
 from follow_protocol import follow_protocol
 import time
 
-print("Please enter your Instagram credentials")
-username_input = raw_input("Username: ")
-passowrd_input = getpass.getpass('Password: ')
+username_input = str(sys.argv[1])
+passowrd_input = str(sys.argv[2])
+
+if len(username_input) > 0 and len(passowrd_input) > 0 :
+  print ("Username: %s" % username_input)
+else :
+  print("Please enter your Instagram credentials")
+  username_input = raw_input("Username: ")
+  passowrd_input = getpass.getpass('Password: ')
 
 #username_input = ''
 #passowrd_input = ''
@@ -22,7 +28,7 @@ bot = InstaBot(login=username_input, password=passowrd_input,
                like_per_day=4000,
                comments_per_day=0,
                tag_list=['outdoors', 'adventure', 'photography', 'exploring', 'explore', 'camping', 'backpacking',
-                          'adventure', 'climbing', 'bouldering' 'yosemite', 'yellowstone', 
+                          'adventure', 'climbing', 'bouldering', 'yosemite', 'yellowstone', 
                           'travel', 'desert', 'forest', 'nationalpark', 'backpacking', 'mg5k', 'wilderness',
                           'moodygrams', 'shoot2kill', 'artofvisuals', 'aov5k', 'wanderlust', 'journey'],
                tag_blacklist=[],

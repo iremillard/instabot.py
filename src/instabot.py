@@ -284,6 +284,7 @@ class InstaBot:
             else:
                 self.login_status = False
                 self.write_log('Login error! Check your login data!')
+                exit()
         else:
             self.write_log('Login error! Connection error!')
 
