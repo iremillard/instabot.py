@@ -27,7 +27,8 @@ else :
 #passowrd_input = ''
 
 bot = InstaBot(login=username_input, password=passowrd_input,
-               like_per_day=4000,
+               #like_per_day=2000,
+               like_per_day=500,
                comments_per_day=0,
                tag_list=['outdoors', 'adventure', 'photography', 'exploring', 'explore', 'camping', 'backpacking',
                           'adventure', 'climbing', 'bouldering', 'yosemite', 'yellowstone', 
@@ -37,8 +38,8 @@ bot = InstaBot(login=username_input, password=passowrd_input,
                user_blacklist={'serena.claudio':''},
                max_like_for_one_tag=50,
                media_max_like=200,
-               media_min_like=3,
-               follow_per_day=325,
+               media_min_like=5,
+               follow_per_day=100,
                follow_time=60*60*24, #24 hours
                #follow_time=60, #1 min
                unfollow_per_day=0,
